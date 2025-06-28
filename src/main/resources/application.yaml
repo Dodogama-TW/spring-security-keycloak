@@ -1,0 +1,21 @@
+server:
+  port: 8081
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: myclient
+            client-secret: your-client-secret
+            scope: openid, profile, email
+            provider: keycloak
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/test-keycloak-realm
+            user-name-attribute: preferred_username
+keycloak:
+  logout-url: "http://localhost:8080/realms/test-keycloak-realm/protocol/openid-connect/logout"
+  redirect-url: "http://localhost:8081/"
