@@ -149,7 +149,19 @@ class TokenService(
                 TokenError(reason = "Unexpected oauth2 user type. ${auth.principal::class.simpleName}").left()
             }
         }
-    ...
+
+    fun getIdToken(auth: OAuth2AuthenticationToken): Either<ApplicationError, OidcIdToken> =
+        auth.principal.let { oAuth2User ->
+            when (oAuth2User) {
+                is OidcUser -> {
+                    oAuth2User.idToken.right()
+                }
+                else -> {
+                    TokenError(reason = "Unexpected oauth2 user type. ${oAuth2User::class.simpleName}").left()
+                }
+            }
+        }
+}
 ```
 
 ## Preparation
@@ -198,3 +210,14 @@ docker run -p 8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADM
    > :bulb: 我是用 intellij 的 run maven configuration，搭配 env file plugin。如果是使用mvn的再麻煩自行查找怎麼設定
 
 ## 常見問題
+1. Keycloak 的登出問題
+![keycloak-logout](/image/keycloak-logout-question.png)
+
+2. 清除 Authentication 的時機點
+![clear authentication](/image/authentication-clear-timing.png)
+
+3. 為什麼要Disable CSRF? (我菜還想不到怎麼解決CSRF இдஇ)
+![disable csrf](/image/why-disable-csrf.png)
+
+4. 開發中可能遇到CORS問題 (前端測試網頁之後有空再改 (´;ω;`) )
+![cors problem](/image/normal-cors-problem.png)
