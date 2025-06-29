@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Frontend Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 40px;
+    }
+
+    button {
+      padding: 12px 24px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      min-width: 300px;
+      text-align: left;
+      white-space: pre-line;
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Frontend Test Interface</h1>
+  <div>
+    <form id="logoutForm" action="/logout" method="POST">
+      <button id="logoutBtn">🔒 Logout</button>
+    </form>
+    <button id="userInfoBtn">👤 Get User Info</button>
+  </div>
+
+  <div id="result">No user info loaded.</div>
+
+  <script>
+    document.getElementById("userInfoBtn").onclick = () => {
+      fetch('/api/v1/user-info')
+        .then(res => {
+          if (!res.ok) throw new Error("Request failed");
+          return res.json();
+        })
+        .then(data => {
+          const { userName, testAccountName } = data;
+          document.getElementById("result").innerText =
+            `Name: ${userName}\nTest Account Name: ${testAccountName}`;
+        })
+        .catch(err => {
+          document.getElementById("result").innerText = "❌ Failed to load user info.";
+          console.error(err);
+        });
+    };
+  </script>
+</body>
+
+</html>

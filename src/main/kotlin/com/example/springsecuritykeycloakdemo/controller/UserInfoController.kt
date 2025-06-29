@@ -43,6 +43,7 @@ class UserInfoController(
                 }
             },
             ifRight = { responseBodyString ->
+                logger.info(LogFormat.SEND_RESPONSE_SUCCESSFULLY_LOG_FORMAT, responseBodyString, request.requestURI)
                 ResponseEntity
                     .status(HttpStatus.OK)
                     .contentType(MediaType.parseMediaType("application/json"))

@@ -9,13 +9,16 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 class SecurityConfig(
-    private val keycloakLogoutHandler: KeycloakLogoutHandler
+    private val keycloakLogoutHandler: KeycloakLogoutHandler,
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            .csrf { csrf ->
+                csrf.disable()
+            }
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("/", "/webjars/**", "/css/**", "/js/**").permitAll()
+                auth.requestMatchers("/webjars/**", "/css/**", "/js/**").permitAll()
                     .anyRequest().authenticated()
             }
             .oauth2Login { Customizer.withDefaults<HttpSecurity>() }

@@ -3,6 +3,7 @@ package com.example.springsecuritykeycloakdemo.service
 import arrow.core.Either
 import arrow.core.Option
 import arrow.core.left
+import arrow.core.right
 import arrow.core.toOption
 import com.example.springsecuritykeycloakdemo.model.ApplicationError
 import com.example.springsecuritykeycloakdemo.model.GetTestUserInfoError
@@ -11,6 +12,7 @@ import com.example.springsecuritykeycloakdemo.model.TokenError
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
+import org.springframework.security.oauth2.core.oidc.OidcIdToken
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.stereotype.Service
 
@@ -33,7 +35,19 @@ class TokenService(
                 }
             }
             else -> {
-                TokenError(reason = "Unexpected oauth 2 user type. ${auth.principal::class.simpleName}").left()
+                TokenError(reason = "Unexpected oauth2 user type. ${auth.principal::class.simpleName}").left()
+            }
+        }
+
+    fun getIdToken(auth: OAuth2AuthenticationToken): Either<ApplicationError, OidcIdToken> =
+        auth.principal.let { oAuth2User ->
+            when (oAuth2User) {
+                is OidcUser -> {
+                    oAuth2User.idToken.right()
+                }
+                else -> {
+                    TokenError(reason = "Unexpected oauth2 user type. ${oAuth2User::class.simpleName}").left()
+                }
             }
         }
 
