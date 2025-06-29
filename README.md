@@ -3,10 +3,10 @@
 > :bulb: 剛剛碰Oauth2 的菜鳥工程師，如果有任何有敘述錯誤的地方，請不吝色指教 (｡A｡)
 
 ## System Architecture
-![system](/system-architecture/architecture.excalidraw.png)
+![system](/system-architecture/system-design.png)
 
 ## Data Flow
-![data flow](/system-architecture/dataflow.excalidraw.png)
+![data flow](/system-architecture/dataflow.png)
 
 ## Description
 這個範例主要用於實作 Spring Boot 怎麼與 Oauth 2.0 Server 串接，實現登入用戶的認證 `Authentication`。
