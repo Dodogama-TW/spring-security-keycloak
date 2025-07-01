@@ -33,6 +33,32 @@ object UserInfoControllerTestData {
             "keycloak",
         )
 
+    private val testExpiredIdToken: OidcIdToken =
+        OidcIdToken(
+            "token-for-test",
+            Instant.now().minusSeconds(3600),
+            Instant.now().minusSeconds(1800),
+            mapOf(
+                "sub" to "123456789",
+                "name" to "DODOGAMA TW",
+                "test-account-name" to "dodogamatw",
+                "email" to "test@example.com",
+            ),
+        )
+
+    private val testExpiredOidcUser =
+        DefaultOidcUser(
+            listOf(SimpleGrantedAuthority("ROLE_USER")),
+            testExpiredIdToken,
+        )
+
+    val testExpiredAuthentication =
+        OAuth2AuthenticationToken(
+            testExpiredOidcUser,
+            testExpiredOidcUser.authorities,
+            "keycloak",
+        )
+
     val expectedTestUserInfoResponse: String =
         """
         {

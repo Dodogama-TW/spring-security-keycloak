@@ -45,6 +45,28 @@ class UserInfoControllerTest {
     @Test
     @DisplayName(
         """
+            GIVEN a expired user which complete oauth2 login
+             WHEN calling /api/v1/user-info
+             THEN it should get http status 302
+              AND redirect to oauth2 login
+        """,
+    )
+    fun `test get user information api with expired authentication`() {
+        mockMvc.perform(
+            get("/api/v1/user-info")
+                .with(
+                    SecurityMockMvcRequestPostProcessors.authentication(
+                        UserInfoControllerTestData.testExpiredAuthentication,
+                    ),
+                ),
+        )
+            .andExpect(status().is3xxRedirection)
+            .andExpect(redirectedUrlPattern("**/oauth2/authorization/**"))
+    }
+
+    @Test
+    @DisplayName(
+        """
             GIVEN request without oauth2 login session
              WHEN calling /api/v1/user-info
              THEN it should get http status 302
